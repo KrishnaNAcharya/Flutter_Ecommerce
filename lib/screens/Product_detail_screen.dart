@@ -29,7 +29,7 @@ class _ProductDetailsScreenState extends State<ProductDetailScreen> {
               Text("\$${widget.product.price}", style: textTheme.titleMedium),
               const SizedBox(height: 5),
               Wrap(
-                spacing: 5,
+                spacing: 10,
                 children: [
                   for (final tag in widget.product.tags)
                     Chip(
