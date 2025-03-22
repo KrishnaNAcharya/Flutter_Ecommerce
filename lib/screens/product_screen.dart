@@ -1,28 +1,29 @@
+import 'package:my_project_2/models/product.dart';
+import 'package:my_project_2/repositories/product_repository.dart';
+import 'package:my_project_2/widgets/product_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_project_2/repositories/product_repository.dart';
-import 'package:my_project_2/widgets/product_card.dart';
 
-import '../models/product.dart';
-
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+class ProductsScreen extends StatefulWidget {
+  const ProductsScreen({super.key});
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductsScreenState extends State<ProductsScreen> {
   final ProductRepository _repository = ProductRepository();
   List<Product> products = [];
-  bool isLoading= false;
+  bool isLoading = false;
+
   @override
   void initState() {
     _fetchProduct();
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,14 +40,25 @@ class _ProductScreenState extends State<ProductScreen> {
               padding: EdgeInsets.all(12),
               style: GoogleFonts.poppins(),
             ),
+
             Expanded(
-              child: GridView.count(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 15),
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
-                children: [for (final product in products) ProductCard(product: product)],
+              child: Builder(
+                builder: (context) {
+                  if (isLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return GridView.count(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 15),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    children: [
+                      for (final product in products)
+                        ProductCard(product: product),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -57,11 +69,12 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _fetchProduct() async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
     final List<Product> result = await _repository.fetchProducts();
     setState(() {
       products = result;
-      });
-    }
+      isLoading = false;
+    });
+  }
 }

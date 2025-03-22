@@ -6,6 +6,6 @@ import 'package:my_project_2/theme.dart';
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(home : HomeScreen(),
-    theme: MaterialTheme(GoogleFonts.poppinsTextTheme()).light(),
+    theme: MaterialTheme(GoogleFonts.poppinsTextTheme()).dark(),
     debugShowCheckedModeBanner:false,),);
 }
