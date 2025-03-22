@@ -2,23 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_project_2/repositories/product_repository.dart';
+import 'package:my_project_2/widgets/product_card.dart';
 
-class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+import '../models/product.dart';
+
+class ProductScreen extends StatefulWidget {
+  const ProductScreen({super.key});
 
   @override
-  State<ProductsScreen> createState() => _ProductsScreenState();
+  State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductsScreenState extends State<ProductsScreen> {
-  final ProductRepository _repository=ProductRepository();
-
+class _ProductScreenState extends State<ProductScreen> {
+  final ProductRepository _repository = ProductRepository();
+  List<Product> products = [];
+  bool isLoading= false;
   @override
-  void initState(){
-    _fetchProducts();
+  void initState() {
+    _fetchProduct();
     super.initState();
   }
-  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -42,10 +46,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                children: [
-                  for (int i = 0; i < 20; i++)
-                    Placeholder()
-                ],
+                children: [for (final product in products) ProductCard(product: product)],
               ),
             ),
           ],
@@ -53,8 +54,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
       ),
     );
   }
-  void _fetchProducts(){
-    final result = _repository.fetchProducts();
-    }
 
+  void _fetchProduct() async {
+    setState(() {
+      isLoading=true;
+    });
+    final List<Product> result = await _repository.fetchProducts();
+    setState(() {
+      products = result;
+      });
+    }
 }

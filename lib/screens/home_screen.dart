@@ -12,41 +12,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ProfileScreen()),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Shopping App",
-            style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(CupertinoIcons.bag),
-            ),
-          ],
-        ),
+
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: const [
+          currentIndex: _currentIndex,
+          onTap: (newIndex) {
+            setState(() {
+              _currentIndex = newIndex;
+            });
+          },
+          items: [
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.home),
               label: "Home",
@@ -57,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: const ProductScreen(), // Loads ProductScreen in HomeScreen
+        body: _currentIndex == 0 ? ProductScreen(): ProfileScreen(),
         );
     }
 }
