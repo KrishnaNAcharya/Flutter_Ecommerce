@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_project_2/repositories/product_repository.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -10,6 +11,13 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  final ProductRepository _repository=ProductRepository();
+
+  @override
+  void initState(){
+    _fetchProducts();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,4 +53,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
       ),
     );
   }
+  void _fetchProducts(){
+    final result = _repository.fetchProducts();
+    }
+
 }
